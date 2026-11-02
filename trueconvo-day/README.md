@@ -1,6 +1,6 @@
 # A day with True Convo (draft)
 
-The whole day, as the product is meant to be once finished, for the "A day with True Convo" story page.
+The whole day, every intended module, the house and build-your-own, as the product is meant to be once finished, for the "A day with True Convo" story page.
 Draft only: nothing here is published.
 
 - Open `index.html` in a browser and scroll.

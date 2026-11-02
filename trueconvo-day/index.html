@@ -244,6 +244,31 @@
   .foot { position: absolute; inset: auto 0 0 0; padding: var(--sc-5) var(--sc-gutter); color: var(--muted); font-size: var(--sc-t-xs); text-align: center; }
   .foot a { color: var(--muted); }
 
+  /* --- the wall screen and the "yours" grid ------------------------------ */
+  .card--more { justify-content: center; border-style: dashed; }
+  .card--more h3 { font-size: var(--sc-t-xl); }
+  .wall {
+    position: relative; z-index: 1; aspect-ratio: 16 / 10; border-radius: 18px;
+    background: #0e0b0a; border: 1px solid var(--line); box-shadow: var(--sc-e3), var(--sc-edge);
+    padding: 4%; overflow: hidden;
+  }
+  .wall__grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 1fr; gap: 3%; height: 100%; }
+  .tile { background: var(--shell); border: 1px solid var(--line); border-radius: 12px; padding: 0.8em 0.9em; display: flex; flex-direction: column; gap: 0.15em; min-width: 0; }
+  .tile small { color: var(--muted); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; }
+  .tile b { color: var(--sc-ink); font-size: var(--sc-t-base); font-weight: 700; line-height: 1.2; }
+  .tile span { color: var(--sc-ink-soft); font-size: var(--sc-t-xs); }
+  .tile--big { grid-column: span 2; grid-row: span 2; }
+  .tile--big b { font-size: var(--sc-t-3xl); line-height: 1; margin: 0.1em 0; }
+  .tile--big .choices { margin-top: auto; }
+  .tile--wide { grid-column: span 2; }
+  .tile--net { border-color: rgba(247,178,103,0.5); }
+  .tile--net b { color: var(--amber); }
+  .yours h2 { margin: 0 0 var(--sc-6); }
+  .yours__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sc-5) var(--sc-6); max-width: 70rem; }
+  .yours__grid div { color: var(--sc-ink-soft); font-size: var(--sc-t-base); line-height: 1.55; padding-top: var(--sc-4); border-top: 1px solid var(--line); }
+  .yours__grid b { color: var(--sc-ink); display: block; margin-bottom: 0.2em; }
+  .msg em { font-style: normal; color: var(--sc-ink); }
+
   /* --- phone widths: the screen goes on top, the words underneath -------- */
   @media (max-width: 760px) {
     .bar .note { font-size: var(--sc-t-xs); }
@@ -265,6 +290,13 @@
     .evening .sc-wrap { grid-template-columns: 1fr; gap: var(--sc-6); }
     .phone { width: min(15rem, 68vw); }
     .sun { width: 170vmax; height: 170vmax; }
+    .wall { order: -1; aspect-ratio: 4 / 4.6; padding: 3%; }
+    .wall__grid { grid-template-columns: repeat(2, 1fr); gap: 2.5%; }
+    .tile { padding: 0.6em 0.7em; }
+    .tile--big b { font-size: var(--sc-t-2xl); }
+    .tile--big { grid-row: span 1; }
+    .tile--big .choices { display: none; }
+    .yours__grid { grid-template-columns: 1fr; }
     .dawn__title { top: 6%; }
     .dawn__title h1 { max-width: 9ch; }
     .dawn__mac { width: 90vw; bottom: 16%; }
@@ -428,7 +460,7 @@
         <div class="rail__lead sc-stack">
           <p class="time">12:30 PM</p>
           <h2 class="sc-display sc-display--lg">The whole day in one place.</h2>
-          <p class="sc-body">Calendars, lists, habits and mail, together on the Desk and on the phone. All of it stored on Sam's devices, encrypted, with no account at Cloudwork.</p>
+          <p class="sc-body">Calendar, tasks, lists, habits, mail, the inbox, time, sources, health and the Atlas, together on the Desk and on the phone. All of it on Sam's devices, encrypted, with no account at Cloudwork.</p>
         </div>
 
         <div class="card" data-sc-tilt="6">
@@ -439,6 +471,16 @@
           <div class="row"><b><span class="dot" style="background:#5fae8a"></span>Late shift</b><i>5:00 – 9:00</i></div>
           <div class="row"><b><span class="dot" style="background:var(--amber)"></span>Mum: Sunday lunch?</b><i>Sun</i></div>
           <span class="card__foot">Reads your calendars. Writes only when you say.</span>
+        </div>
+
+        <div class="card" data-sc-tilt="6">
+          <h3>Today</h3>
+          <p>What needs Sam, in order. Nothing else.</p>
+          <div class="row"><b>Reply to the landlord</b><i>before 12</i></div>
+          <div class="row"><b>Book the car in</b><i>Thu</i></div>
+          <div class="row"><b>Dentist</b><i>2:45</i></div>
+          <div class="row"><b>Bins out</b><i>tonight</i></div>
+          <span class="card__foot">Tasks and reminders. Nag me once, then leave me alone.</span>
         </div>
 
         <div class="card" data-sc-tilt="6">
@@ -473,12 +515,53 @@
         </div>
 
         <div class="card" data-sc-tilt="6">
-          <h3>Memory, chosen</h3>
-          <p>Only what Sam kept. Nothing remembered by accident.</p>
-          <div class="row"><b>Mum's lunch is Sundays</b><i>kept today</i></div>
-          <div class="row"><b>Prefers short replies</b><i>Oct 3</i></div>
-          <div class="row"><b>Shop opens 10 to 6</b><i>Business</i></div>
-          <span class="card__foot">Correct it, forget it, or undo. Any time.</span>
+          <h3>Inbox</h3>
+          <p>Anything shared from the phone lands here, as a source.</p>
+          <div class="row"><b>Reel: raised-bed garden</b><i>transcribed</i></div>
+          <div class="row"><b>Receipt photo, tyres</b><i>read: £212</i></div>
+          <div class="row"><b>Article: tenancy rights</b><i>summarised</i></div>
+          <span class="card__foot">Filed only where you say. "Unchecked" until you look.</span>
+        </div>
+
+        <div class="card" data-sc-tilt="6">
+          <h3>Where the time went</h3>
+          <p>Sam's screen time, as a heat map, from Sam's own Mac.</p>
+          <div class="grid" aria-hidden="true">
+            <i class="l1"></i><i class="l3"></i><i class="l3"></i><i class="l2"></i><i class="l1"></i><i></i><i></i><i class="l2"></i><i class="l3"></i><i class="l3"></i><i class="l3"></i><i class="l1"></i><i></i><i></i>
+            <i class="l2"></i><i class="l3"></i><i class="l2"></i><i class="l3"></i><i class="l2"></i><i class="l1"></i><i></i><i class="l1"></i><i class="l3"></i><i class="l3"></i><i class="l2"></i><i class="l2"></i><i></i><i></i>
+          </div>
+          <span class="card__foot">Productive or not: your tags, your call.</span>
+        </div>
+
+        <div class="card" data-sc-tilt="6">
+          <h3>Followed</h3>
+          <p>People Sam learns from, boiled down to lessons Sam keeps.</p>
+          <div class="row"><b>The allotment channel</b><i>2 new lessons</i></div>
+          <div class="row"><b>A security newsletter</b><i>1 idea</i></div>
+          <span class="card__foot">You keep the lesson, not the feed.</span>
+        </div>
+
+        <div class="card" data-sc-tilt="6">
+          <h3>Health</h3>
+          <p>A calm record. The same spot, photographed the same way, over months.</p>
+          <div class="row"><b>Left shoulder</b><i>4 photos · no change</i></div>
+          <div class="row"><b>Self-check</b><i>due Nov 20</i></div>
+          <span class="card__foot">A summary to bring to an appointment. No diagnosis.</span>
+        </div>
+
+        <div class="card" data-sc-tilt="6">
+          <h3>Atlas</h3>
+          <p>Everything Sam has worked through, as a map you can walk.</p>
+          <div class="row"><b>The boiler saga</b><i>since Oct 3</i></div>
+          <div class="row"><b>Garden plan</b><i>revisit in spring</i></div>
+          <div class="row"><b>Mum's birthday</b><i>decided</i></div>
+          <span class="card__foot">Come back and find the goal, the decisions and the next step.</span>
+        </div>
+
+        <div class="card card--more" data-sc-tilt="6">
+          <h3>And the ones you add.</h3>
+          <p>Every module can be moved, renamed, hidden or replaced. Each has a home under Personal, Family, Business, Creator or Code, and you decide where it sits.</p>
+          <span class="card__foot">Your layout is yours.</span>
         </div>
       </div>
     </div>
@@ -537,6 +620,52 @@
     </div>
   </section>
 
+  <!-- 4:30 · the shop. Convo Engine, Site Engine, the visibility checkup. -->
+  <section data-sc-act="pin" data-sc-span="4" data-sc-drift="#1c1115">
+    <div data-sc-stage class="scene scene--flip">
+      <div class="sun sun--evening" aria-hidden="true"></div>
+
+      <div class="mac" data-sc-tilt="4" aria-label="A drawing of the Desk in Sam's Business space">
+        <div class="mac__menubar" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="pane desk">
+          <div class="desk__side" aria-hidden="true">
+            <b>Desk</b>
+            <small>Business · The shop</small>
+            <span class="on">This week</span>
+            <span>Facts sheet</span>
+            <span>Website</span>
+            <span>Checkup</span>
+          </div>
+          <div class="desk__chat">
+            <p class="msg msg--me" data-sc-cue="0 1 0 0"><small>Voice note · 0:48</small>right so um the shop's going to open at nine from december, not ten, and I want to tell people about the christmas workshop thing, saturday mornings, kids welcome…</p>
+            <p class="msg msg--ai" data-sc-cue="0.1 1 0.12 0"><small>Your PA</small>Here it is in your voice, for the shop's Instagram and the window sign:<br><em>"From December we open at 9. And on Saturday mornings the back room turns into a workshop. Bring the kids."</em></p>
+            <p class="msg msg--ai" data-sc-cue="0.4 1 0.12 0">I've also changed the opening time on your facts sheet. The website rebuilds from it. Preview is ready.</p>
+            <div class="choices" data-sc-cue="0.46 1 0.12 0"><span class="go">Publish the site</span><span>Show preview</span><span>Not now</span></div>
+            <p class="msg msg--other" data-sc-cue="0.7 1 0.12 0"><small>Visibility checkup</small>Your Google listing still says 10 AM. Fix that first; it's what people see before the site. Two reviews need a reply.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step" data-sc-cue="0 0.3 0 0.15">
+          <p class="time">4:30 PM</p>
+          <h2 class="sc-display">Ramble. Get a piece.</h2>
+          <p class="sc-body">Sam runs a small shop on the side. A 48-second voice note becomes a post in Sam's own words, because True Convo has learned how Sam talks.</p>
+        </div>
+        <div class="step" data-sc-cue="0.28 0.62 0.15 0.15">
+          <p class="time">4:35 PM</p>
+          <h2 class="sc-display">One facts sheet. One website.</h2>
+          <p class="sc-body">Hours, prices, services, in one sheet Sam owns. Change a fact and the site rebuilds from it, to a host Sam chooses. Nothing private can reach it.</p>
+        </div>
+        <div class="step" data-sc-cue="0.6">
+          <p class="time">4:40 PM</p>
+          <h2 class="sc-display">How the shop looks from outside.</h2>
+          <p class="sc-body">A checkup reads the listing, the reviews and what AI assistants say about the shop, and hands Sam a short fix list. Business space only.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- 7:30 · evening. Phone to Mac, and memory. -->
   <section class="evening" data-sc-act="flow" data-sc-drift="#160f12">
     <div class="sc-wrap">
@@ -560,6 +689,109 @@
     </div>
   </section>
 
+  <!-- 8:30 · the house. Home devices on their own network. -->
+  <section data-sc-act="pin" data-sc-span="3.6" data-sc-drift="#120d10">
+    <div data-sc-stage class="scene">
+      <div class="sun sun--night" aria-hidden="true"></div>
+
+      <div class="steps">
+        <div class="step" data-sc-cue="0 0.34 0 0.15">
+          <p class="time">8:30 PM</p>
+          <h2 class="sc-display">The house, on its own network.</h2>
+          <p class="sc-body">The thermostat, the lights, the doorbell, the kitchen screen and both Macs, talking to each other at home. True Convo is the thing in the middle. The internet isn't needed for any of it.</p>
+        </div>
+        <div class="step" data-sc-cue="0.32 0.66 0.15 0.15">
+          <p class="time">8:31 PM</p>
+          <h2 class="sc-display">Say it once.</h2>
+          <p class="sc-body">"Heating to 20 when either of us gets home, and show the house on the kitchen screen." Sam gets a preview, says yes, and that's the rule now.</p>
+        </div>
+        <div class="step" data-sc-cue="0.64">
+          <p class="time">8:40 PM</p>
+          <h2 class="sc-display">A screen for the wall.</h2>
+          <p class="sc-body">The same lists, calendar and house, in a layout made for a screen in the kitchen. Family space. Nothing on it leaves the house.</p>
+        </div>
+      </div>
+
+      <div class="wall" data-sc-tilt="4" aria-label="A drawing of the kitchen wall screen">
+        <div class="wall__grid">
+          <div class="tile tile--big">
+            <small>Home</small>
+            <b>19.5°</b>
+            <span>Heating to 20 at 6:10 PM</span>
+            <div class="choices" data-sc-cue="0.36 1 0.12 0"><span class="go">Keep this rule</span><span>Not now</span></div>
+          </div>
+          <div class="tile"><small>Lights</small><b>Kitchen, hall</b><span>3 of 11 on</span></div>
+          <div class="tile"><small>Doorbell</small><b>Quiet</b><span>Last: parcel, 3:12</span></div>
+          <div class="tile"><small>Who's home</small><b>Sam</b><span>Jo at 9:15</span></div>
+          <div class="tile"><small>Sunday</small><b>Mum, 1 PM</b><span>Lemon chicken</span></div>
+          <div class="tile tile--wide"><small>Groceries</small><b>Bin bags · Something for Sunday</b><span>Added this morning, by voice</span></div>
+          <div class="tile tile--wide tile--net" data-sc-cue="0.66 1 0.12 0"><small>Network</small><b>8 devices · 0 cloud connections</b><span>Everything on this screen stays in the house</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9:15 · build it yourself. -->
+  <section data-sc-act="pin" data-sc-span="4" data-sc-drift="#0f0b0d">
+    <div data-sc-stage class="scene scene--flip">
+      <div class="mac" data-sc-tilt="4" aria-label="A drawing of the Desk building a small app">
+        <div class="mac__menubar" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="pane desk">
+          <div class="desk__side" aria-hidden="true">
+            <b>Desk</b>
+            <small>Code</small>
+            <span class="on">Bins &amp; car</span>
+            <span>Workshop sign-up</span>
+            <small>Agents</small>
+            <span>Builder</span>
+            <span>Checker</span>
+          </div>
+          <div class="desk__chat">
+            <p class="msg msg--me" data-sc-cue="0 1 0 0">I want a tiny app for the house: bins, the car service, the boiler check. It nags us the night before, on the kitchen screen. Nothing fancy.</p>
+            <p class="msg msg--ai" data-sc-cue="0.12 1 0.12 0"><small>Your PA</small>Handed to the builder with your words and the house's rules. The checker will try it before you see it.</p>
+            <p class="msg msg--other" data-sc-cue="0.36 1 0.12 0"><small>Builder</small>Done: "House Chores". Four reminders, one screen, runs on the Mac, shows on the wall. It reaches nothing outside the house. Preview below.</p>
+            <p class="msg msg--other" data-sc-cue="0.5 1 0.12 0"><small>Checker</small>Tried all four. One fix: the bins reminder fired at midnight, now 7 PM. Passed.</p>
+            <div class="choices" data-sc-cue="0.56 1 0.12 0"><span class="go">Keep it</span><span>Change something</span><span>Package it</span></div>
+            <span class="local" data-sc-cue="0.12 1 0.12 0">Built, checked and run on this Mac</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step" data-sc-cue="0 0.3 0 0.15">
+          <p class="time">9:15 PM</p>
+          <h2 class="sc-display">Build the thing you wish existed.</h2>
+          <p class="sc-body">Sam isn't a programmer. Sam describes a small app for the house. A builder makes it, a checker tries to break it, and the PA shows Sam the result in plain words.</p>
+        </div>
+        <div class="step" data-sc-cue="0.28 0.62 0.15 0.15">
+          <p class="time">9:30 PM</p>
+          <h2 class="sc-display">Keep it for the house. Or don't stop there.</h2>
+          <p class="sc-body">If all Sam wants is this one app on this one network, that's the whole story, and it's a good one. If Sam wants to package it and sell it to other people, that's the same tool, one step further.</p>
+        </div>
+        <div class="step" data-sc-cue="0.6">
+          <p class="time">9:45 PM</p>
+          <h2 class="sc-display">No frontier model required.</h2>
+          <p class="sc-body">Every step today ran on a model on Sam's Mac, apart from the one question Sam chose to send out. Small models get written recipes to follow, so the floor is local. Bigger brains are an option, never a requirement.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Yours to shape. -->
+  <section class="sc-section yours" data-sc-act="flow" data-sc-drift="#0d0a0b">
+    <div class="sc-wrap">
+      <h2 class="sc-display sc-display--lg" data-sc-in>Yours to shape.</h2>
+      <div class="yours__grid" data-sc-in data-sc-stagger="70">
+        <div><b>Open core.</b> The core is open source. Copy it, change it, label it as your own. The True Convo name is the only thing kept back.</div>
+        <div><b>Your keys or none.</b> Runs on local models, or on your own sign-ins and keys. Cloud costs pass straight through.</div>
+        <div><b>Rename anything.</b> Modules, spaces, the assistant itself. Move them, hide them, change nothing underneath.</div>
+        <div><b>Leave any time.</b> Export everything in a form that works without us. Restore brings back your information, never permission to act.</div>
+        <div><b>Switch the AI off.</b> Lists, calendar, notes and export keep working with no model at all.</div>
+        <div><b>A floor no edition can remove.</b> Approval before anything leaves. Nothing deleted silently. The microphone never surprises you.</div>
+      </div>
+    </div>
+  </section>
+
   <!-- 11:00 · night. Close. -->
   <section data-sc-act="pin" data-sc-span="1.3" data-sc-drift="#0c0908">
     <div data-sc-stage class="close">
@@ -567,9 +799,9 @@
       <div class="close__inner">
         <p class="time" data-sc-cue="0.04">11:00 PM</p>
         <h2 class="sc-display sc-display--lg" data-sc-cue="0.06" data-sc-kinetic="lines">The Mac sleeps. Sam's day stays on it.</h2>
-        <p class="sc-body" data-sc-cue="0.12">Conversations, memory, lists and mail, encrypted on Sam's own devices. One thing left today, once, because Sam said yes. No account with us. No ads. Nothing sold.</p>
+        <p class="sc-body" data-sc-cue="0.12">Conversations, memory, lists, mail, the shop, the house and a small app Sam made, encrypted on Sam's own devices. One thing left today, once, because Sam said yes. No account with us. No ads. Nothing sold.</p>
         <div class="stands" data-sc-cue="0.18">
-          <p><b>Where this stands.</b> True Convo is in development and not out yet. Built so far: the pill, dictation at the cursor, the Desk with a model running on the Mac, and encrypted storage, all being tried on a test Mac. Being built now: the PA, the calendar, lists, habits, mail sorting and the iPhone. Everything on this page is the plan; the tests decide the order.</p>
+          <p><b>Where this stands.</b> True Convo is in development and not out yet. Built so far: the pill, dictation at the cursor, the Desk with a model running on the Mac, encrypted storage, and the first engines for lists, habits, tasks, the agenda, mail sorting, the calendar, time and sources, tried on a test Mac with invented data. Being built now: the PA, the iPhone, sync and the first-run guide. The shop, the house, building your own apps and the wall screen come after launch. Everything on this page is the plan; the tests decide the order.</p>
         </div>
       </div>
       <footer class="foot">True Convo is made by Cloudwork Systems · <a href="https://trueconvo.com/privacy.html">Privacy</a></footer>
