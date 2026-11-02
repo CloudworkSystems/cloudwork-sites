@@ -1,0 +1,38 @@
+{
+  "note": "Shot list for the True Convo story site. Atmosphere only: no people, no faces, no text, no logos, no screens. Prices are entered by hand from the model's fal page and checked again before any run.",
+  "cap_usd": 3.00,
+  "model": {
+    "endpoint": "fal-ai/wan/v2.2-a14b/text-to-video",
+    "why": "Wan is open-weight, so the same kind of clip could later be made for free on a local machine.",
+    "price_usd_per_clip": null,
+    "price_checked": null
+  },
+  "style": "Slow, calm, locked-off camera. Warm Ember palette: deep brown-black shadows, magenta and coral light, amber highlights. Soft film grain. No people, no text, no logos, no screens with content.",
+  "shots": [
+    {
+      "id": "test",
+      "use": "One cheap test so we see the quality before spending more.",
+      "prompt": "A window at first light, sky turning from deep magenta to coral above low rolling hills, thin mist in the valley, very slow movement."
+    },
+    {
+      "id": "dawn",
+      "use": "Behind the title on every person's page, before the sun rises.",
+      "prompt": "Wide view of low rolling hills before sunrise, a band of coral and amber light growing on the horizon, mist drifting slowly through the valley, stars fading in a deep magenta sky."
+    },
+    {
+      "id": "noon",
+      "use": "Behind the midday modules rail.",
+      "prompt": "Soft midday light falling across a plain wooden table by an open window, leaf shadows moving gently on the surface, a cup of tea steaming, warm and quiet."
+    },
+    {
+      "id": "dusk",
+      "use": "Behind the evening scene, phone to Mac.",
+      "prompt": "A quiet street of small houses at dusk, windows lighting up one by one in warm amber, sky fading from coral to deep magenta, very slow."
+    },
+    {
+      "id": "night",
+      "use": "Behind the house scene with the wall screen.",
+      "prompt": "Inside a calm home at night, warm lamp light in an empty room, rain softly on the window, city lights blurred far outside, almost still."
+    }
+  ]
+}
