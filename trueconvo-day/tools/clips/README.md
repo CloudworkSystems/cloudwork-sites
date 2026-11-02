@@ -10,7 +10,8 @@ portable capability layer so any model can use it.
 
 - `shots.json`: the shot list, the model, the price per clip and the spending cap.
 - `make_clips.py`: dry run by default. It refuses to spend while the price is
-  missing, when a run would pass the cap, or when `FAL_KEY` is not set.
+  missing, or when a run would pass the cap. The key sits in the environment's Network
+  secrets, so the proxy adds it and the script never sees it.
 - `log.jsonl`: every prompt, estimate and result, written as it happens.
 
 Raw clips land in `trueconvo-day/media/raw/`. They are compressed and checked

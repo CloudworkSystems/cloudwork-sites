@@ -15,7 +15,9 @@ Usage:
   python3 make_clips.py                 # dry run
   python3 make_clips.py --run test      # make one named shot
   python3 make_clips.py --run all       # make every shot not yet made
-The key is read from the FAL_KEY environment variable and never printed.
+The key normally lives in the environment's Network secrets: the proxy adds the
+"Authorization: Key ..." header itself, so this script never sees the key. If a
+FAL_KEY variable is set instead, it is used and never printed.
 """
 import json, os, sys, time, urllib.request, urllib.error
 from pathlib import Path
@@ -42,7 +44,8 @@ def log(entry):
 def call(url, key, body=None):
     data = json.dumps(body).encode() if body is not None else None
     req = urllib.request.Request(url, data=data, method="POST" if data else "GET")
-    req.add_header("Authorization", f"Key {key}")
+    if key:
+        req.add_header("Authorization", f"Key {key}")
     req.add_header("Content-Type", "application/json")
     with urllib.request.urlopen(req, timeout=60) as r:
         return json.loads(r.read())
@@ -110,9 +113,7 @@ def main():
         raise SystemExit("Refusing: set price_usd_per_clip in shots.json from fal's model page first.")
     if spent + est > cap:
         raise SystemExit(f"Refusing: ${spent:.2f} spent + ${est:.2f} would pass the ${cap:.2f} cap.")
-    key = os.environ.get("FAL_KEY")
-    if not key:
-        raise SystemExit("Refusing: FAL_KEY is not set in this environment.")
+    key = os.environ.get("FAL_KEY")  # None: the proxy adds the key from Network secrets
     for s in todo:
         make(s, cfg, key)
 
