@@ -1,6 +1,6 @@
 # A day with True Convo (draft)
 
-A rough first scene, the morning, for the "A day with True Convo" story page.
+The whole day, as the product is meant to be once finished, for the "A day with True Convo" story page.
 Draft only: nothing here is published.
 
 - Open `index.html` in a browser and scroll.

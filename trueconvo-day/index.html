@@ -1,9 +1,11 @@
 <!doctype html>
 <!--
-  "A day with True Convo": rough first scene (the morning). Draft preview only.
-  Built with the scroll-craft engine (vendor/, MIT, see vendor/scroll-craft-LICENSE.txt).
+  "A day with True Convo": second take. The whole day, as the product is
+  meant to be once it is finished. Draft preview only; nothing here is live.
+  Built on the scroll-craft engine (vendor/, MIT, see vendor/scroll-craft-LICENSE.txt).
   Colours and font follow True Convo's Ember brand (open-convo brand/README.md).
-  Feature labels follow open-convo STATUS.md as of November 1, 2026.
+  What the day shows comes from open-convo PLAN.md, foundations.md and the
+  design notes. The strip at the end says what is built today.
   Nothing on this page loads from another site.
 -->
 <html lang="en">
@@ -11,7 +13,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>A day with True Convo</title>
-<meta name="description" content="Follow one invented person through an ordinary morning with True Convo, a personal AI app for the Mac that keeps your conversations on your own computer.">
+<meta name="description" content="Follow one invented person through an ordinary day with True Convo, the personal AI app for the Mac and iPhone that keeps your life on your own devices.">
 <meta name="robots" content="noindex">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%2315110f'/><circle cx='16' cy='16' r='7' fill='%23f37a4a'/></svg>">
 <link rel="stylesheet" href="vendor/scrollcraft.css">
@@ -46,61 +48,78 @@
     --magenta: #c8298b;
     --muted: #a8998f;
     --line: rgba(247, 242, 238, 0.14);
+    --shell: #1b1614;
+    --shell-2: #2b2320;
   }
 
   body { background: var(--sc-canvas); }
 
   .bar {
     position: fixed; inset: 0 0 auto 0; z-index: var(--sc-z-chrome);
-    display: flex; justify-content: space-between; align-items: center;
+    display: flex; justify-content: space-between; align-items: center; gap: var(--sc-4);
     padding: var(--sc-4) var(--sc-gutter);
     font-size: var(--sc-t-sm); color: var(--sc-ink);
-    background: linear-gradient(to bottom, rgba(16,12,11,0.85), rgba(16,12,11,0));
+    background: linear-gradient(to bottom, rgba(16,12,11,0.9), rgba(16,12,11,0));
   }
   .bar b { font-weight: 700; letter-spacing: -0.01em; }
-  .draft { color: var(--muted); }
+  .bar .note { color: var(--amber); text-align: right; }
 
-  /* The signature move: the morning light is the Ember gradient, and it
-     rises with the scroll, so the scroll bar is the clock. */
-  .sky {
-    position: absolute; inset: auto -20% -60% -20%; height: 120%;
-    pointer-events: none; z-index: 0;
-    background:
-      radial-gradient(60% 55% at 50% 100%, rgba(247,178,103,0.42), rgba(243,122,74,0.30) 34%, rgba(200,41,139,0.20) 58%, transparent 80%);
-    opacity: calc(0.25 + var(--sc-p, 0) * 0.75);
-    translate: 0 calc((1 - var(--sc-p, 0)) * 45%);
+  /* The signature move: the sun. One Ember glow that rises through the
+     morning, hangs high at midday, sets in the evening and is gone at night.
+     Each act positions it; --sc-p (0..1 inside the act) moves it. */
+  .sun {
+    position: absolute; left: 50%; width: 140vmax; height: 140vmax; translate: -50% 0;
+    pointer-events: none; z-index: 0; border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(247,178,103,0.55), rgba(243,122,74,0.34) 30%, rgba(200,41,139,0.20) 55%, transparent 72%);
   }
+  .sun--dawn    { top: calc(100% - 20vmax - var(--sc-p, 0) * 30vmax); opacity: calc(0.35 + var(--sc-p, 0) * 0.5); }
+  .sun--morning { top: calc(100% - 46vmax - var(--sc-p, 0) * 40vmax); opacity: 0.85; }
+  .sun--noon    { top: -90vmax; opacity: 0.9; }
+  .sun--evening { top: calc(10% + var(--sc-p, 0) * 70vmax); opacity: calc(0.9 - var(--sc-p, 0) * 0.5);
+                  background: radial-gradient(closest-side, rgba(243,122,74,0.5), rgba(200,41,139,0.36) 35%, rgba(200,41,139,0.12) 58%, transparent 72%); }
+  .sun--night   { top: 100%; opacity: 0; }
 
-  /* --- 1 · hero ----------------------------------------------------------- */
-  .hero { display: grid; place-items: center; text-align: center; padding-inline: var(--sc-gutter); }
-  .hero__inner { position: relative; z-index: 2; max-width: 46rem; }
-  .hero h1 { margin: 0 0 var(--sc-5); }
-  .hero .sc-body { margin-inline: auto; font-size: var(--sc-t-lg); }
-  .time { font-variant-numeric: tabular-nums; color: var(--amber); font-size: var(--sc-t-sm); letter-spacing: 0.06em; margin: 0 0 var(--sc-4); }
+  .time { font-variant-numeric: tabular-nums; color: var(--amber); font-size: var(--sc-t-sm); letter-spacing: 0.06em; margin: 0 0 var(--sc-3); }
 
-  /* --- 2 · the morning ---------------------------------------------------- */
-  .morning {
+  /* --- dawn hero: five planes ------------------------------------------ */
+  .dawn { overflow: clip; }
+  .dawn > * { position: absolute; }
+  .dawn__sky { inset: -20% 0 0 0; z-index: 0; }
+  .dawn__sky .sun { top: calc(70% - var(--sc-p, 0) * 55vmax); opacity: calc(0.4 + var(--sc-p, 0) * 0.6); }
+  .dawn__hills { left: -5%; right: -5%; width: 110%; bottom: 18%; height: 46%; z-index: 1; }
+  .dawn__title { z-index: 2; left: 0; right: 0; top: 3%; text-align: center; padding-inline: var(--sc-gutter); }
+  .dawn__title h1 { margin: 0 auto; max-width: 12ch; font-size: clamp(3.4rem, 1.5rem + 9vw, 7.6rem); }
+  .dawn__desk { left: -5%; right: -5%; bottom: -4%; height: 34%; z-index: 3;
+    background: linear-gradient(to bottom, #2a211d, #15100e 70%); box-shadow: 0 -1px 0 rgba(247,178,103,0.35), 0 -30px 60px rgba(0,0,0,0.5); }
+  .dawn__mac { z-index: 4; left: 50%; bottom: 10%; translate: -50% 0; width: min(52vw, 54rem); }
+  .dawn__mac .mac { aspect-ratio: 16 / 9.5; }
+  .dawn__mist { left: -10%; right: -10%; bottom: -10%; height: 40%; z-index: 5; pointer-events: none;
+    background: linear-gradient(to top, rgba(16,12,11,0.95), rgba(247,178,103,0.06) 55%, transparent); }
+  .dawn__beat { z-index: 6; left: 0; right: 0; bottom: 5%; text-align: center; padding-inline: var(--sc-gutter); }
+  .dawn__beat .sc-body { margin-inline: auto; font-size: var(--sc-t-lg); color: var(--sc-ink); max-width: 44rem; }
+  .dawn__beat .sc-body--faint { margin-top: var(--sc-3); font-size: var(--sc-t-base); color: var(--amber); }
+  /* The spotlight: a soft light that follows the pointer across the dawn. */
+  .dawn::after { content: ""; position: absolute; inset: 0; z-index: 6; pointer-events: none;
+    background: radial-gradient(28rem circle at calc(var(--sc-mx, 0.5) * 100%) calc(var(--sc-my, 0.5) * 100%), rgba(247,178,103,0.10), transparent 70%); }
+
+  /* --- scene: words beside a screen ------------------------------------- */
+  .scene {
     display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
     align-items: center; gap: var(--sc-7);
     padding: 5.5rem var(--sc-gutter) var(--sc-6);
   }
+  .scene--flip { grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); }
+  .scene--flip .steps { order: 2; }
   .steps { position: relative; z-index: 2; display: grid; }
   .steps > * { grid-area: 1 / 1; }
-  .step .time { margin-bottom: var(--sc-3); }
   .step h2 { font-size: var(--sc-t-2xl); margin: 0 0 var(--sc-4); }
   .step p { margin: 0; }
-  .tag {
-    display: inline-block; margin-top: var(--sc-4);
-    font-size: var(--sc-t-xs); letter-spacing: 0.08em; text-transform: uppercase;
-    padding: 0.3em 0.75em; border-radius: 999px; border: 1px solid var(--line); color: var(--sc-ink-soft);
-  }
-  .tag--testing { border-color: rgba(247,178,103,0.5); color: var(--amber); }
 
-  /* A drawn Mac screen. Drawn, not screenshotted, so it shows only what is built. */
+  /* A drawn Mac screen. Drawn, not screenshotted, so it can show the finished product. */
   .mac {
     position: relative; z-index: 1;
     aspect-ratio: 16 / 10.5; border-radius: 14px;
-    background: #1b1614; border: 1px solid var(--line);
+    background: var(--shell); border: 1px solid var(--line);
     box-shadow: var(--sc-e3), var(--sc-edge);
     overflow: hidden;
   }
@@ -110,6 +129,9 @@
   }
   .mac__menubar i { width: 9px; height: 9px; border-radius: 50%; background: #4a3f3a; }
   .pane { position: absolute; inset: 26px 0 0 0; padding: 7% 8%; }
+  .screen { position: absolute; inset: 26px 0 0 0; }
+  .screen > * { position: absolute; inset: 0; }
+
   .note__title { color: var(--sc-ink); font-size: var(--sc-t-lg); font-weight: 700; margin: 0 0 var(--sc-4); }
   .note__line { color: var(--sc-ink-soft); font-size: var(--sc-t-base); margin: 0 0 var(--sc-2); }
   .note__dictated { color: var(--sc-ink); font-size: var(--sc-t-base); margin: var(--sc-4) 0 0; }
@@ -117,12 +139,14 @@
     content: ""; display: inline-block; width: 2px; height: 1.1em; margin-left: 2px;
     vertical-align: -0.15em; background: var(--coral);
   }
+  .note__fix { margin-top: var(--sc-4); font-size: var(--sc-t-xs); color: var(--amber); }
+  .note__fix s { color: var(--muted); }
 
   .pill {
     position: absolute; left: 50%; top: 40px; translate: -50% 0; z-index: 3;
     display: flex; align-items: center; gap: 10px;
     padding: 8px 14px; border-radius: 999px;
-    background: #2b2320; border: 1px solid rgba(243,122,74,0.55);
+    background: var(--shell-2); border: 1px solid rgba(243,122,74,0.55);
     box-shadow: var(--sc-e2); color: var(--sc-ink); font-size: var(--sc-t-xs);
     white-space: nowrap;
   }
@@ -131,49 +155,123 @@
   .wave i:nth-child(2) { height: 90%; } .wave i:nth-child(3) { height: 60%; }
   .wave i:nth-child(4) { height: 100%; } .wave i:nth-child(5) { height: 50%; }
 
-  .desk { background: #1b1614; display: grid; grid-template-columns: 26% 1fr; padding: 0; }
+  /* The Desk, drawn. */
+  .desk { background: var(--shell); display: grid; grid-template-columns: 26% 1fr; }
   .desk__side { border-right: 1px solid var(--line); padding: 8% 7%; }
-  .desk__side b { display: block; color: var(--sc-ink); font-size: var(--sc-t-sm); margin-bottom: var(--sc-4); }
-  .desk__side span { display: block; color: var(--muted); font-size: var(--sc-t-xs); padding: 0.45em 0.6em; border-radius: 6px; margin-bottom: 4px; }
+  .desk__side b { display: block; color: var(--sc-ink); font-size: var(--sc-t-sm); margin-bottom: var(--sc-3); }
+  .desk__side span { display: block; color: var(--muted); font-size: var(--sc-t-xs); padding: 0.45em 0.6em; border-radius: 6px; margin-bottom: 3px; }
   .desk__side span.on { background: rgba(200,41,139,0.18); color: var(--sc-ink); }
-  .desk__chat { padding: 6% 7%; display: flex; flex-direction: column; gap: var(--sc-4); }
-  .msg { font-size: var(--sc-t-sm); line-height: 1.5; max-width: 34ch; }
+  .desk__side small { display: block; color: var(--muted); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; margin: var(--sc-4) 0 var(--sc-2); }
+  .desk__chat { padding: 6% 6%; display: flex; flex-direction: column; gap: var(--sc-3); overflow: hidden; }
+  .msg { font-size: var(--sc-t-sm); line-height: 1.5; max-width: 36ch; margin: 0; }
   .msg small { display: block; color: var(--muted); font-size: var(--sc-t-xs); margin-bottom: 4px; }
   .msg--me { align-self: flex-end; background: #362c28; color: var(--sc-ink); padding: 0.7em 0.9em; border-radius: 12px 12px 2px 12px; }
   .msg--ai { color: var(--sc-ink-soft); }
+  .msg--other { color: var(--sc-ink-soft); border-left: 2px solid var(--coral); padding-left: 0.8em; }
+  .msg mark { background: rgba(247,178,103,0.28); color: var(--sc-ink); border-radius: 3px; padding: 0 2px; }
+  .choices { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+  .choices span {
+    font-size: var(--sc-t-xs); padding: 0.45em 0.9em; border-radius: 999px;
+    border: 1px solid var(--line); color: var(--sc-ink);
+  }
+  .choices span.go { background: var(--magenta); border-color: var(--magenta); color: #fff; }
   .local {
-    margin-top: auto; align-self: flex-start; font-size: var(--sc-t-xs); color: var(--amber);
+    align-self: flex-start; font-size: var(--sc-t-xs); color: var(--amber);
     border: 1px solid rgba(247,178,103,0.4); border-radius: 999px; padding: 0.3em 0.8em;
   }
+  .popover {
+    position: absolute; right: 7%; top: 30%; width: 46%; z-index: 2;
+    background: var(--shell-2); border: 1px solid var(--line); border-radius: 10px;
+    box-shadow: var(--sc-e3); padding: 0.9em 1em; font-size: var(--sc-t-xs); line-height: 1.5; color: var(--sc-ink-soft);
+  }
+  .popover b { display: block; color: var(--sc-ink); margin-bottom: 4px; }
+  .popover em { display: block; margin-top: 6px; color: var(--amber); font-style: normal; }
 
-  /* --- 3 · where this stands --------------------------------------------- */
-  .stands h2 { margin: 0 0 var(--sc-6); }
-  .stands ul { list-style: none; margin: 0; padding: 0; max-width: 46rem; }
-  .stands li { display: grid; grid-template-columns: 9.5rem 1fr; gap: var(--sc-4); padding: var(--sc-4) 0; border-top: 1px solid var(--line); color: var(--sc-ink-soft); }
-  .stands li b { color: var(--sc-ink); font-weight: 600; }
-  .stands .k { font-size: var(--sc-t-xs); letter-spacing: 0.08em; text-transform: uppercase; padding-top: 0.25em; }
-  .k--testing { color: var(--amber); }
-  .k--coming { color: var(--muted); }
+  /* --- noon: the rail ---------------------------------------------------- */
+  .noon { overflow: hidden; }
+  .rail { display: flex; align-items: center; gap: var(--sc-6); padding: 6rem var(--sc-gutter) 4rem; width: max-content; position: relative; z-index: 2; }
+  .rail__lead { width: min(34rem, 72vw); flex: none; }
+  .rail__lead h2 { margin: 0 0 var(--sc-4); }
+  .card {
+    flex: none; width: min(22rem, 78vw); min-height: 19rem;
+    background: var(--shell); border: 1px solid var(--line); border-radius: 16px;
+    box-shadow: var(--sc-e2), var(--sc-edge); padding: 1.4rem; overflow: hidden;
+    display: flex; flex-direction: column; gap: 0.6rem;
+  }
+  .card h3 { margin: 0; font-size: var(--sc-t-lg); color: var(--sc-ink); }
+  .card p { margin: 0; color: var(--sc-ink-soft); font-size: var(--sc-t-sm); }
+  .card .row { display: flex; justify-content: space-between; gap: 1rem; font-size: var(--sc-t-sm); color: var(--sc-ink-soft); padding: 0.45em 0; border-top: 1px solid var(--line); }
+  .card .row b { color: var(--sc-ink); font-weight: 600; }
+  .card .row i { font-style: normal; color: var(--muted); font-size: var(--sc-t-xs); white-space: nowrap; }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
+  .grid { display: grid; grid-template-columns: repeat(14, 1fr); gap: 4px; margin-top: 0.4rem; }
+  .grid i { aspect-ratio: 1; border-radius: 2px; background: rgba(247,242,238,0.07); }
+  .grid i.l1 { background: rgba(243,122,74,0.35); } .grid i.l2 { background: rgba(243,122,74,0.7); } .grid i.l3 { background: var(--coral); }
+  .tick { display: flex; gap: 0.6rem; align-items: baseline; font-size: var(--sc-t-sm); color: var(--sc-ink-soft); padding: 0.3em 0; }
+  .tick::before { content: ""; width: 14px; height: 14px; border-radius: 4px; border: 1px solid var(--line); flex: none; translate: 0 2px; }
+  .tick.done { color: var(--muted); text-decoration: line-through; }
+  .tick.done::before { background: var(--coral); border-color: var(--coral); }
+  .card__foot { margin-top: auto; padding-top: 0.6rem; font-size: var(--sc-t-xs); color: var(--amber); }
 
-  /* --- 4 · close ---------------------------------------------------------- */
+  /* --- evening: phone to Mac -------------------------------------------- */
+  .evening { padding: var(--sc-section) var(--sc-gutter); }
+  .evening .sc-wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--sc-8); align-items: center; }
+  .phone {
+    width: min(17rem, 70vw); aspect-ratio: 9 / 18.5; margin-inline: auto;
+    background: var(--shell); border: 1px solid var(--line); border-radius: 36px;
+    box-shadow: var(--sc-e3), var(--sc-edge); padding: 1.2rem 1rem; overflow: hidden;
+    display: flex; flex-direction: column; gap: 0.7rem; position: relative;
+  }
+  .phone::before { content: ""; width: 34%; height: 18px; border-radius: 999px; background: #000; margin: 0 auto 0.4rem; }
+  .phone .msg { font-size: var(--sc-t-xs); max-width: none; }
+  .keep {
+    margin-top: auto; background: var(--shell-2); border: 1px solid var(--line); border-radius: 12px; padding: 0.8em 0.9em;
+    font-size: var(--sc-t-xs); color: var(--sc-ink-soft);
+  }
+  .keep b { display: block; color: var(--sc-ink); margin-bottom: 4px; }
+  .keep .choices { margin-top: 8px; }
+  .spaces { display: flex; gap: 6px; margin-top: var(--sc-5); flex-wrap: wrap; }
+  .spaces span { font-size: var(--sc-t-xs); letter-spacing: 0.06em; text-transform: uppercase; padding: 0.4em 0.8em; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .spaces span.on { color: var(--sc-ink); border-color: rgba(243,122,74,0.6); }
+
+  /* --- night: the close -------------------------------------------------- */
   .close { display: grid; place-items: center; text-align: center; padding-inline: var(--sc-gutter); }
+  .close__inner { position: relative; z-index: 2; max-width: 44rem; }
   .close .sc-body { margin: var(--sc-5) auto 0; }
+  .stands { margin: var(--sc-7) auto 0; max-width: 40rem; text-align: left; border-top: 1px solid var(--line); padding-top: var(--sc-5); font-size: var(--sc-t-sm); color: var(--sc-ink-soft); }
+  .stands b { color: var(--sc-ink); font-weight: 600; }
+  .stands p { margin: 0 0 var(--sc-3); }
   .foot { position: absolute; inset: auto 0 0 0; padding: var(--sc-5) var(--sc-gutter); color: var(--muted); font-size: var(--sc-t-xs); text-align: center; }
+  .foot a { color: var(--muted); }
 
-  /* --- phone: the screen goes on top, the words underneath --------------- */
+  /* --- phone widths: the screen goes on top, the words underneath -------- */
   @media (max-width: 760px) {
-    .morning { grid-template-columns: 1fr; grid-template-rows: auto 1fr; gap: var(--sc-5); align-content: start; padding-top: 4.5rem; }
+    .bar .note { font-size: var(--sc-t-xs); }
+    .bar .note::before { content: "Not out yet"; }
+    .bar .note span { display: none; }
+    .scene, .scene--flip { grid-template-columns: 1fr; grid-template-rows: auto 1fr; gap: var(--sc-5); align-content: start; padding-top: 4.5rem; }
+    .scene--flip .steps { order: 0; }
     .mac { order: -1; aspect-ratio: 4 / 3.9; }
-    .note { padding-top: 16%; }
-    .pill { top: 34px; }
-    .msg { font-size: var(--sc-t-xs); }
-    .desk__chat { padding: 7% 6%; gap: var(--sc-3); }
     .pane { padding: 8% 7%; }
+    .pane.note { padding-top: 16%; }
+    .pill { top: 34px; }
     .desk { grid-template-columns: 1fr; }
     .desk__side { display: none; }
+    .desk__chat { padding: 7% 6%; gap: var(--sc-3); }
+    .msg { font-size: var(--sc-t-xs); }
+    .popover { width: 70%; top: 36%; }
     .step h2 { font-size: var(--sc-t-xl); }
-    .stands li { grid-template-columns: 1fr; gap: var(--sc-1); }
-    .draft { display: none; }
+    .rail { padding-top: 5rem; gap: var(--sc-5); }
+    .evening .sc-wrap { grid-template-columns: 1fr; gap: var(--sc-6); }
+    .phone { width: min(15rem, 68vw); }
+    .sun { width: 170vmax; height: 170vmax; }
+    .dawn__title { top: 6%; }
+    .dawn__title h1 { max-width: 9ch; }
+    .dawn__mac { width: 90vw; bottom: 16%; }
+    .dawn__mac .mac { aspect-ratio: 4 / 3; }
+    .dawn__desk { height: 30%; }
+    .dawn__beat { bottom: 4%; }
+    .dawn__beat .sc-body { font-size: var(--sc-t-base); }
   }
 </style>
 </head>
@@ -184,108 +282,297 @@
 
 <header class="bar">
   <b>True Convo</b>
-  <span class="draft">Draft preview · the morning only</span>
+  <span class="note"><span>The product we're building · not out yet</span></span>
 </header>
 
 <main id="top">
 
-  <!-- 1 · Before dawn. Greets on landing. -->
-  <section data-sc-act="pin" data-sc-span="1.2" data-sc-drift="#100c0b">
-    <div data-sc-stage class="hero">
-      <div class="sky" aria-hidden="true"></div>
-      <div class="hero__inner" data-sc-cue="0 1 0 0.12">
-        <p class="time">6:58 AM</p>
-        <h1 class="sc-display sc-display--xl" data-sc-kinetic="lines">A day with True&nbsp;Convo</h1>
-        <p class="sc-body">Follow Sam through an ordinary morning. Sam is made up. The Mac, and the fact that everything stays on it, is not.</p>
+  <!-- 6:58 · dawn. Five planes at different rates: sky and sun, hills,
+       the headline (behind the Mac on desktop), the desk with the Mac, mist. -->
+  <section data-sc-act="pin" data-sc-span="2.4" data-sc-drift="#100c0b">
+    <div data-sc-stage class="dawn" data-sc-spotlight>
+      <div class="dawn__sky" data-sc-parallax="-0.6" aria-hidden="true">
+        <div class="sun sun--dawn"></div>
+      </div>
+      <svg class="dawn__hills" data-sc-parallax="-2.2" viewBox="0 0 1440 400" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+        <path fill="#1a1311" d="M0 300 C 180 240 300 250 420 280 S 700 330 860 270 S 1150 200 1440 260 V400 H0 Z"/>
+        <path fill="#140e0c" d="M0 340 C 240 310 420 350 600 330 S 900 290 1100 330 S 1300 360 1440 340 V400 H0 Z"/>
+      </svg>
+      <div class="dawn__title" data-sc-parallax="-1.8">
+        <p class="time" data-sc-cue="0 0.5 0 0.3">6:58 AM</p>
+        <h1 class="sc-display sc-display--xl" data-sc-cue="0 0.6 0 0.3" data-sc-kinetic="lines">A day with True&nbsp;Convo</h1>
+      </div>
+      <div class="dawn__desk" data-sc-parallax="1.2" aria-hidden="true"></div>
+      <div class="dawn__mac" data-sc-parallax="-1.6">
+        <div class="mac" data-sc-tilt="5" aria-label="A drawing of Sam's Mac, showing the Desk at dawn">
+          <div class="mac__menubar" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div class="pane desk">
+            <div class="desk__side" aria-hidden="true">
+              <b>Desk</b>
+              <small>Personal</small>
+              <span class="on">Tuesday</span>
+              <span>Garden plan</span>
+              <span>Mum's birthday</span>
+              <small>Family</small>
+              <span>Sunday lunch</span>
+            </div>
+            <div class="desk__chat">
+              <p class="msg msg--ai"><small>Your PA · 6:58</small>Morning, Sam. Dentist moved to 2:45, late shift from 5. Mum still hasn't heard back about Sunday. Two emails need you; the rest can wait.</p>
+              <p class="msg msg--me" data-sc-cue="0.3 1 0.3 0" data-sc-kinetic="words">Remind me after coffee.</p>
+              <span class="local">On this Mac · nothing sent anywhere</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dawn__mist" data-sc-parallax="2.4" aria-hidden="true"></div>
+      <div class="dawn__beat" data-sc-cue="0.56 1 0.25 0">
+        <p class="sc-body">One Tuesday with Sam, and an AI that lives on Sam's own Mac and iPhone, remembers what Sam chooses, and asks before it acts.</p>
+        <p class="sc-body sc-body--faint">Sam is invented. This is the product we're building.</p>
       </div>
     </div>
   </section>
 
-  <!-- 2 · The morning. One pinned act; the light rises as you scroll. -->
-  <section data-sc-act="pin" data-sc-span="4.4" data-sc-drift="#1a1210">
-    <div data-sc-stage class="morning">
-      <div class="sky" aria-hidden="true"></div>
+  <!-- 7:10 · morning. Voice, anywhere. -->
+  <section data-sc-act="pin" data-sc-span="4" data-sc-drift="#1a1210">
+    <div data-sc-stage class="scene">
+      <div class="sun sun--morning" aria-hidden="true"></div>
 
       <div class="steps">
-        <div class="step" data-sc-cue="0 0.23 0 0.15">
+        <div class="step" data-sc-cue="0 0.28 0 0.15">
           <p class="time">7:10 AM</p>
           <h2 class="sc-display">Coffee on, hands full.</h2>
-          <p class="sc-body">Sam remembers two things that need doing today, and has nowhere to type them.</p>
+          <p class="sc-body">Sam double-taps the Right Option key. A small pill appears at the top of the screen and listens. It works in any app Sam can type in.</p>
         </div>
-        <div class="step" data-sc-cue="0.2 0.45 0.15 0.15">
+        <div class="step" data-sc-cue="0.26 0.58 0.15 0.15">
           <p class="time">7:11 AM</p>
-          <h2 class="sc-display">Two taps, and it's listening.</h2>
-          <p class="sc-body">A double tap of the Right Option key brings up a small pill at the top of the screen.</p>
-          <span class="tag tag--testing">In testing</span>
+          <h2 class="sc-display">The words land where the cursor is.</h2>
+          <p class="sc-body">Speech becomes text on the Mac itself. Nothing is sent anywhere to be transcribed.</p>
         </div>
-        <div class="step" data-sc-cue="0.42 0.67 0.15 0.15">
-          <p class="time">7:11 AM</p>
-          <h2 class="sc-display">Sam talks. The words land where the cursor is.</h2>
-          <p class="sc-body">Any app Sam can type in. The speech is turned into text on the Mac itself.</p>
-          <span class="tag tag--testing">In testing</span>
-        </div>
-        <div class="step" data-sc-cue="0.64">
-          <p class="time">8:30 AM</p>
-          <h2 class="sc-display">Then a harder question.</h2>
-          <p class="sc-body">On the Desk, Sam asks for help planning a tricky call. The answer comes from an AI model running on Sam's own Mac. Nothing leaves it.</p>
-          <span class="tag tag--testing">In testing</span>
+        <div class="step" data-sc-cue="0.56">
+          <p class="time">7:12 AM</p>
+          <h2 class="sc-display">"When I say Thursday, I mean the car."</h2>
+          <p class="sc-body">Sam fixes one word, and True Convo learns how Sam talks. Next week it gets it right the first time.</p>
         </div>
       </div>
 
-      <div class="mac" aria-label="A drawing of Sam's Mac screen">
+      <div class="mac" data-sc-tilt="4" aria-label="A drawing of Sam's Mac screen">
         <div class="mac__menubar" aria-hidden="true"><i></i><i></i><i></i></div>
-
-        <div class="pane note" data-sc-cue="0 0.7 0 0.08">
-          <p class="note__title">Saturday</p>
+        <div class="pane note">
+          <p class="note__title">Tuesday</p>
           <p class="note__line">Bins out</p>
           <p class="note__line">Dentist, 2:15</p>
-          <p class="note__dictated" data-sc-cue="0.44 0.7 0.4 0.05" data-sc-kinetic="words">Call Mum back about Sunday lunch, and book the car in for Thursday.</p>
+          <p class="note__dictated" data-sc-cue="0.3 1 0.4 0" data-sc-kinetic="words">Call Mum back about Sunday lunch, and book the car in for Thursday.</p>
+          <p class="note__fix" data-sc-cue="0.6">Learned: <s>"the car in"</s> → "the car in for a service"</p>
         </div>
-
-        <div class="pill" data-sc-cue="0.22 0.66 0.15 0.12" aria-hidden="true">
+        <div class="pill" data-sc-cue="0.08 0.58 0.15 0.12" aria-hidden="true">
           <span class="wave"><i></i><i></i><i></i><i></i><i></i></span>
           Listening
         </div>
+      </div>
+    </div>
+  </section>
 
-        <div class="pane desk" data-sc-cue="0.66">
+  <!-- 9:00 · the PA. -->
+  <section data-sc-act="pin" data-sc-span="4.4" data-sc-drift="#1f1512">
+    <div data-sc-stage class="scene scene--flip">
+      <div class="sun sun--noon" aria-hidden="true"></div>
+
+      <div class="mac" data-sc-tilt="4" aria-label="A drawing of the Desk, True Convo's conversation home">
+        <div class="mac__menubar" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="pane desk">
           <div class="desk__side" aria-hidden="true">
             <b>Desk</b>
-            <span class="on">Planning the call</span>
-            <span>Garden ideas</span>
-            <span>Holiday list</span>
+            <small>Personal</small>
+            <span class="on">Tuesday</span>
+            <span>Garden plan</span>
+            <span>Mum's birthday</span>
+            <small>Business</small>
+            <span>Shop website</span>
           </div>
           <div class="desk__chat">
-            <p class="msg msg--me">I need to tell my landlord the boiler's broken again. How do I keep it calm but firm?</p>
-            <p class="msg msg--ai"><small>True Convo</small>Start with the date it broke and what you've already tried. Then say what you need and by when.</p>
-            <span class="local">Answered on this Mac</span>
+            <p class="msg msg--me" data-sc-cue="0 1 0 0">Can you sort my three inboxes and tell me what actually matters today?</p>
+            <p class="msg msg--ai" data-sc-cue="0.14 1 0.12 0"><small>Your PA</small>Done. 41 new. Three need you: the landlord about the boiler, the dentist moving you to 2:45, and Mum. The rest is sorted into receipts, newsletters and noise.</p>
+            <p class="msg msg--ai" data-sc-cue="0.4 1 0.12 0">There are 6 newsletters you haven't opened since spring. Want me to unsubscribe?</p>
+            <div class="choices" data-sc-cue="0.46 1 0.12 0"><span class="go">Yes, these 6</span><span>Show me first</span><span>Not now</span></div>
+            <p class="msg msg--ai" data-sc-cue="0.7 1 0.12 0"><small>Your PA</small>The shop website is a bigger job. I've handed it to the site builder with your notes. It'll show you a preview before anything goes live.</p>
+            <span class="local" data-sc-cue="0.14 1 0.12 0">Everything above happened on this Mac</span>
           </div>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step" data-sc-cue="0 0.3 0 0.15">
+          <p class="time">9:00 AM</p>
+          <h2 class="sc-display">One assistant to talk to.</h2>
+          <p class="sc-body">Sam opens the Desk and asks the PA for the shape of the day. Mail from three accounts is read and sorted on the Mac, by a model running on the Mac.</p>
+        </div>
+        <div class="step" data-sc-cue="0.28 0.62 0.15 0.15">
+          <p class="time">9:02 AM</p>
+          <h2 class="sc-display">It asks before it acts.</h2>
+          <p class="sc-body">Sorting is routine. Unsubscribing, deleting, sending or spending is not, so the PA shows a choice and waits for Sam's own yes. Every time.</p>
+        </div>
+        <div class="step" data-sc-cue="0.6">
+          <p class="time">9:04 AM</p>
+          <h2 class="sc-display">Big jobs go to specialists.</h2>
+          <p class="sc-body">The PA stays small. It hands the website to a specialist with a proper brief, and the specialist reports back in its own words.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 3 · Plain facts, read like a document. -->
-  <section class="sc-section stands" data-sc-act="flow" data-sc-drift="#15110f">
-    <div class="sc-wrap" data-sc-in data-sc-stagger="70">
-      <h2 class="sc-display sc-display--md">Where this stands today</h2>
-      <ul>
-        <li><span class="k k--testing">In testing</span><span><b>The pill and dictation.</b> Built, and being tried on a test Mac.</span></li>
-        <li><span class="k k--testing">In testing</span><span><b>Answers from a model on your Mac.</b> Switched on in the test version only.</span></li>
-        <li><span class="k k--testing">In testing</span><span><b>Everything locked on your Mac.</b> Conversations and dictation are stored encrypted. The final check is underway.</span></li>
-        <li><span class="k k--coming">Coming</span><span><b>Your day's agenda from your calendars.</b> Being built now.</span></li>
-      </ul>
-      <p class="sc-body" style="margin-top: var(--sc-6)">True Convo is in development and not available yet. Sam, the notes and the chat above are invented to show how it works.</p>
+  <!-- 12:30 · noon. A rail of the day's surfaces. -->
+  <section data-sc-act="pan" data-sc-span="4.6" data-sc-drift="#241812">
+    <div data-sc-stage class="noon">
+      <div class="sun sun--noon" aria-hidden="true"></div>
+      <div class="rail" data-sc-pan="0.04">
+        <div class="rail__lead sc-stack">
+          <p class="time">12:30 PM</p>
+          <h2 class="sc-display sc-display--lg">The whole day in one place.</h2>
+          <p class="sc-body">Calendars, lists, habits and mail, together on the Desk and on the phone. All of it stored on Sam's devices, encrypted, with no account at Cloudwork.</p>
+        </div>
+
+        <div class="card" data-sc-tilt="6">
+          <h3>One calendar</h3>
+          <p>iCloud, Google and Sam's work rota, as one view.</p>
+          <div class="row"><b><span class="dot" style="background:#6a9ecf"></span>Stand-up</b><i>9:30</i></div>
+          <div class="row"><b><span class="dot" style="background:var(--coral)"></span>Dentist (moved)</b><i>2:45</i></div>
+          <div class="row"><b><span class="dot" style="background:#5fae8a"></span>Late shift</b><i>5:00 – 9:00</i></div>
+          <div class="row"><b><span class="dot" style="background:var(--amber)"></span>Mum: Sunday lunch?</b><i>Sun</i></div>
+          <span class="card__foot">Reads your calendars. Writes only when you say.</span>
+        </div>
+
+        <div class="card" data-sc-tilt="6">
+          <h3>Groceries</h3>
+          <p>Shared with the house. Dictated this morning.</p>
+          <div class="tick done">Oat milk</div>
+          <div class="tick done">Coffee beans</div>
+          <div class="tick">Bin bags</div>
+          <div class="tick">Something for Sunday lunch</div>
+          <span class="card__foot">Family space · synced through your own iCloud</span>
+        </div>
+
+        <div class="card" data-sc-tilt="6">
+          <h3>Habits</h3>
+          <p>Walk, read, no phone in bed. 10 weeks.</p>
+          <div class="grid" aria-hidden="true">
+            <i class="l1"></i><i class="l2"></i><i></i><i class="l3"></i><i class="l2"></i><i class="l1"></i><i></i><i class="l2"></i><i class="l3"></i><i class="l3"></i><i class="l1"></i><i></i><i class="l2"></i><i class="l3"></i>
+            <i class="l2"></i><i class="l3"></i><i class="l3"></i><i class="l1"></i><i></i><i class="l2"></i><i class="l3"></i><i class="l3"></i><i class="l2"></i><i class="l1"></i><i class="l3"></i><i class="l3"></i><i class="l2"></i><i class="l3"></i>
+            <i class="l3"></i><i class="l2"></i><i class="l3"></i><i class="l3"></i><i class="l2"></i><i class="l3"></i><i class="l3"></i><i class="l1"></i><i class="l3"></i><i class="l3"></i><i class="l3"></i><i class="l2"></i><i class="l3"></i><i></i>
+          </div>
+          <span class="card__foot">Walk: 6 days running</span>
+        </div>
+
+        <div class="card" data-sc-tilt="6">
+          <h3>Mail, sorted</h3>
+          <p>Three inboxes, one view, nothing deleted without a yes.</p>
+          <div class="row"><b>Needs you</b><i>3</i></div>
+          <div class="row"><b>Receipts</b><i>7</i></div>
+          <div class="row"><b>Newsletters</b><i>12</i></div>
+          <div class="row"><b>Noise</b><i>19</i></div>
+          <span class="card__foot">Sorted on this Mac. Your mail never left it.</span>
+        </div>
+
+        <div class="card" data-sc-tilt="6">
+          <h3>Memory, chosen</h3>
+          <p>Only what Sam kept. Nothing remembered by accident.</p>
+          <div class="row"><b>Mum's lunch is Sundays</b><i>kept today</i></div>
+          <div class="row"><b>Prefers short replies</b><i>Oct 3</i></div>
+          <div class="row"><b>Shop opens 10 to 6</b><i>Business</i></div>
+          <span class="card__foot">Correct it, forget it, or undo. Any time.</span>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- 4 · Close. -->
-  <section data-sc-act="pin" data-sc-span="1.1" data-sc-drift="#100c0b">
-    <div data-sc-stage class="close">
-      <div>
-        <h2 class="sc-display sc-display--lg" data-sc-cue="0.05" data-sc-kinetic="lines">Midday is next.</h2>
-        <p class="sc-body" data-sc-cue="0.1">This draft covers Sam's morning. The rest of the day follows once this part feels right.</p>
+  <!-- 3:40 · afternoon. Clarity and the cloud gate. -->
+  <section data-sc-act="pin" data-sc-span="4" data-sc-drift="#1d1214">
+    <div data-sc-stage class="scene">
+      <div class="sun sun--evening" aria-hidden="true"></div>
+
+      <div class="steps">
+        <div class="step" data-sc-cue="0 0.3 0 0.15">
+          <p class="time">3:40 PM</p>
+          <h2 class="sc-display">Wait, what?</h2>
+          <p class="sc-body">A reply uses a phrase Sam doesn't follow. Sam highlights it and right-clicks. An outsider explains it plainly, on a local model, without ever seeing the rest of the conversation.</p>
+        </div>
+        <div class="step" data-sc-cue="0.28 0.62 0.15 0.15">
+          <p class="time">3:52 PM</p>
+          <h2 class="sc-display">A bigger brain, only when asked.</h2>
+          <p class="sc-body">The lease question is hard. True Convo says exactly what would leave the Mac, to whom, and waits. Sam's own API key, Sam's own choice, this once.</p>
+        </div>
+        <div class="step" data-sc-cue="0.6">
+          <p class="time">4:05 PM</p>
+          <h2 class="sc-display">Then back to the Mac.</h2>
+          <p class="sc-body">The reply comes back, is saved encrypted on the Mac, and the cloud is out of the picture again until the next time Sam says yes.</p>
+        </div>
       </div>
-      <footer class="foot">True Convo is made by Cloudwork Systems.</footer>
+
+      <div class="mac" data-sc-tilt="4" aria-label="A drawing of the Desk with a clarity pop-over and a cloud approval">
+        <div class="mac__menubar" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="pane desk">
+          <div class="desk__side" aria-hidden="true">
+            <b>Desk</b>
+            <small>Personal</small>
+            <span class="on">Tuesday</span>
+            <span>Garden plan</span>
+            <span>Mum's birthday</span>
+          </div>
+          <div class="desk__chat">
+            <p class="msg msg--ai"><small>Your PA</small>Your lease says the landlord has to do repairs in a <mark>reasonable time</mark>. Write down the date it broke and what you've already asked for.</p>
+            <p class="msg msg--me" data-sc-cue="0.3 1 0.12 0">What about the clause on page 4 about "quiet enjoyment"? Does that help me?</p>
+            <div class="keep" data-sc-cue="0.36 1 0.12 0">
+              <b>This needs a cloud model.</b>
+              Sends this message and 4 earlier turns to Anthropic (Claude), on your key. Nothing else. Your memory stays here.
+              <div class="choices"><span class="go">Yes, this once</span><span>Not now</span></div>
+            </div>
+            <p class="msg msg--other" data-sc-cue="0.62 1 0.12 0"><small>Claude · Anthropic</small>Yes, it can. "Quiet enjoyment" covers things that make the place hard to live in, and a broken boiler in November usually counts. Mention both clauses together.</p>
+          </div>
+        </div>
+        <div class="popover" data-sc-cue="0.02 0.34 0.15 0.15">
+          <b>Wait, what? · "reasonable time"</b>
+          It means "without unfair delay". The law doesn't give a number of days; for heating in winter it's usually treated as days, not weeks.
+          <em>Explained on this Mac, by an outsider that didn't read your conversation.</em>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7:30 · evening. Phone to Mac, and memory. -->
+  <section class="evening" data-sc-act="flow" data-sc-drift="#160f12">
+    <div class="sc-wrap">
+      <div class="sc-stack" data-sc-in data-sc-stagger="80">
+        <p class="time">7:30 PM</p>
+        <h2 class="sc-display sc-display--lg">Started on the bus. Finished at the desk.</h2>
+        <p class="sc-body">On the way home Sam asks the phone what to cook on Sunday. At home the same conversation is already open on the Mac, carried across through Sam's own iCloud in a form only Sam's devices can read.</p>
+        <p class="sc-body">When something worth keeping comes up, True Convo asks. Sam keeps it, corrects it or skips it. A kept memory lives in one space, Personal, Family or Business, and never crosses over unless Sam moves it.</p>
+        <div class="spaces" aria-hidden="true"><span class="on">Personal</span><span class="on">Family</span><span>Business</span></div>
+      </div>
+      <figure class="phone" data-sc-reveal="up" data-sc-reveal-at="0.1 0.55" aria-label="A drawing of Sam's iPhone">
+        <p class="msg msg--me">Mum's coming Sunday. Something easy that she'd like?</p>
+        <p class="msg msg--ai"><small>Your PA</small>She said she loved the lemon chicken in March. It's in the Family space. Want it on the groceries list?</p>
+        <div class="choices"><span class="go">Add it</span><span>Not now</span></div>
+        <div class="keep">
+          <b>Keep this?</b>
+          "Mum comes for lunch most Sundays." Family space.
+          <div class="choices"><span class="go">Keep</span><span>Correct</span><span>Skip</span></div>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 11:00 · night. Close. -->
+  <section data-sc-act="pin" data-sc-span="1.3" data-sc-drift="#0c0908">
+    <div data-sc-stage class="close">
+      <div class="sun sun--night" aria-hidden="true"></div>
+      <div class="close__inner">
+        <p class="time" data-sc-cue="0.04">11:00 PM</p>
+        <h2 class="sc-display sc-display--lg" data-sc-cue="0.06" data-sc-kinetic="lines">The Mac sleeps. Sam's day stays on it.</h2>
+        <p class="sc-body" data-sc-cue="0.12">Conversations, memory, lists and mail, encrypted on Sam's own devices. One thing left today, once, because Sam said yes. No account with us. No ads. Nothing sold.</p>
+        <div class="stands" data-sc-cue="0.18">
+          <p><b>Where this stands.</b> True Convo is in development and not out yet. Built so far: the pill, dictation at the cursor, the Desk with a model running on the Mac, and encrypted storage, all being tried on a test Mac. Being built now: the PA, the calendar, lists, habits, mail sorting and the iPhone. Everything on this page is the plan; the tests decide the order.</p>
+        </div>
+      </div>
+      <footer class="foot">True Convo is made by Cloudwork Systems · <a href="https://trueconvo.com/privacy.html">Privacy</a></footer>
     </div>
   </section>
 
