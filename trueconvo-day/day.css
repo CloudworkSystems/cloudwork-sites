@@ -304,3 +304,38 @@
   .who a small { display: none; }
   .dawn__mac { bottom: 12%; }
 }
+
+  /* More than software: a field of window lights that come on with scroll. */
+  .together { position: relative; overflow: hidden; padding-block: clamp(5rem, 14vh, 9rem); }
+  .together__lights { position: absolute; inset: 0; pointer-events: none; }
+  .together__lights i {
+    position: absolute; width: var(--s); height: var(--s); border-radius: 50%;
+    background: var(--amber, #f7b267);
+    box-shadow: 0 0 calc(var(--s) * 3) calc(var(--s) * 0.6) rgba(247,178,103,0.35);
+    opacity: clamp(0, (var(--sc-p, 0) - var(--t)) * 9, 0.85);
+    transition: opacity 0.4s linear;
+  }
+  .together__lights .l--c { background: #f37a4a; box-shadow: 0 0 calc(var(--s) * 3) calc(var(--s) * 0.6) rgba(243,122,74,0.35); }
+  .together__lights .l--m { background: #c8298b; box-shadow: 0 0 calc(var(--s) * 3) calc(var(--s) * 0.6) rgba(200,41,139,0.35); }
+  .together::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(60% 55% at 50% 50%, rgba(16,12,11,0.8), rgba(16,12,11,0.35) 65%, transparent);
+  }
+  .together__inner { position: relative; }
+  .together h2 { margin: 0 0 var(--sc-4); }
+  .together__lede { max-width: 40rem; margin-bottom: var(--sc-6); }
+  .together__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sc-5); max-width: 70rem; }
+  .together__card {
+    background: rgba(34,28,26,0.82); border: 1px solid var(--line); border-radius: 16px;
+    padding: var(--sc-5); backdrop-filter: blur(6px);
+  }
+  .together__card b { display: block; color: var(--sc-ink); font-size: var(--sc-t-lg, 1.25rem); margin: 0.5em 0 0.3em; }
+  .together__card p { margin: 0; color: var(--sc-ink-soft); line-height: 1.55; }
+  .soon {
+    display: inline-block; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase;
+    color: #f7b267; border: 1px solid rgba(247,178,103,0.45); border-radius: 999px; padding: 0.15em 0.7em;
+  }
+  .together__note { margin-top: var(--sc-6); max-width: 40rem; }
+  @media (max-width: 760px) {
+    .together__grid { grid-template-columns: 1fr; }
+  }
